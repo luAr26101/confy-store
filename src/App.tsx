@@ -1,23 +1,68 @@
+import {
+  HomeLayout,
+  Landing,
+  Error,
+  Products,
+  SingleProduct,
+  Cart,
+  About,
+  Register,
+  Login,
+  Checkout,
+  Orders,
+} from "./pages";
+import { createBrowserRouter, RouterProvider } from "react-router";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomeLayout />,
+    errorElement: <Error />,
+    children: [
+      {
+        index: true,
+        element: <Landing />,
+      },
+      {
+        path: "products",
+        element: <Products />,
+      },
+      {
+        path: "products/:id",
+        element: <SingleProduct />,
+      },
+      {
+        path: "cart",
+        element: <Cart />,
+      },
+      {
+        path: "about",
+        element: <About />,
+      },
+      {
+        path: "checkout",
+        element: <Checkout />,
+      },
+      {
+        path: "orders",
+        element: <Orders />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+    errorElement: <Error />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+    errorElement: <Error />,
+  },
+]);
+
 function App() {
-  return (
-    <div className="mx-auto w-full max-w-lg p-4">
-      <h1 className="text-3xl font-black">Comfy store</h1>
-      <button className="btn btn-primary btn-xl">Primary</button>
-      <article className="prose lg:prose-xl">
-        <h1>Garlic bread with cheese: What the science tells us</h1>
-        <p>
-          For years parents have espoused the health benefits of eating garlic
-          bread with cheese to their children, with the food earning such an
-          iconic status in our culture that kids will often dress up as warm,
-          cheesy loaf for Halloween.
-        </p>
-        <p>
-          But a recent study shows that the celebrated appetizer may be linked
-          to a series of rabies cases springing up around the country.
-        </p>
-      </article>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;

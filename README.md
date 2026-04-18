@@ -126,18 +126,19 @@ npm i axios@1.15.0 dayjs@1.11.20 @reduxjs/toolkit@2.11.2 @tanstack/react-query@5
 - [React router](https://reactrouter.com/home)
 - [React toastify](https://fkhadra.github.io/react-toastify/introduction/)
 
-## Challenge (3) - Create All Pages
+## Create All Pages
 
-- create pages directory
-- create all pages and export from index.js
+- In the `src` folder create a new folder `pages`
+- Inside the `pages` folder create a `index.ts` file
+- Create all pages and export them from `index.ts`
 - About, Cart, Checkout, Error,
   HomeLayout, Landing, Login, Orders,
   Products, Register, SingleProduct
-- import in app.jsx
+- Import in `App.tsx`
 
-## Solution (3) - Create All Pages
+## About page example
 
-pages/About.jsx
+pages/About.tsx
 
 ```js
 const About = () => {
@@ -146,25 +147,25 @@ const About = () => {
 export default About;
 ```
 
-pages/index.js
+pages/index.ts
 
-```js
-export { default as HomeLayout } from "./HomeLayout";
-export { default as Landing } from "./Landing";
-export { default as SingleProduct } from "./SingleProduct";
-export { default as Products } from "./Products";
-export { default as Cart } from "./Cart";
-export { default as Error } from "./Error";
-export { default as About } from "./About";
-export { default as Login } from "./Login";
-export { default as Register } from "./Register";
-export { default as Checkout } from "./Checkout";
-export { default as Orders } from "./Orders";
+```ts
+export { default as HomeLayout } from "./home-layout";
+export { default as Landing } from "./landing";
+export { default as SingleProduct } from "./single-product";
+export { default as Products } from "./products";
+export { default as Cart } from "./cart";
+export { default as Error } from "./error";
+export { default as About } from "./about";
+export { default as Login } from "./login";
+export { default as Register } from "./register";
+export { default as Checkout } from "./checkout";
+export { default as Orders } from "./orders";
 ```
 
-App.jsx
+App.tsx
 
-```js
+```ts
 import {
   HomeLayout,
   Landing,
@@ -180,16 +181,14 @@ import {
 } from "./pages";
 ```
 
-## Challenge (4) - React Router
+## React Router (data mode)
 
-- configure react router
-- setup initial route structure
-  hint : look for nested UI (basically navbar)
+- [Getting started with Data mode](https://reactrouter.com/start/data/custom)
 
-### App.jsx
+### App.tsx
 
 1. Import Dependencies:
-   - Import necessary modules from the 'react-router-dom' library.
+   - Import necessary modules from the 'react-router' library.
 
 2. Create Router Configuration:
    - Use the `createBrowserRouter` function to set up a router configuration.
@@ -206,12 +205,23 @@ import {
 5. Export App Component:
    - Export the `App` component as the default export of the module.
 
-## Solution (4) - React Router
+App.tsx
 
-App.jsx
-
-```js
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+```ts
+import {
+  HomeLayout,
+  Landing,
+  Error,
+  Products,
+  SingleProduct,
+  Cart,
+  About,
+  Register,
+  Login,
+  Checkout,
+  Orders,
+} from "./pages";
+import { createBrowserRouter, RouterProvider } from "react-router";
 
 const router = createBrowserRouter([
   {
@@ -235,7 +245,10 @@ const router = createBrowserRouter([
         path: "cart",
         element: <Cart />,
       },
-      { path: "about", element: <About /> },
+      {
+        path: "about",
+        element: <About />,
+      },
       {
         path: "checkout",
         element: <Checkout />,
@@ -258,9 +271,10 @@ const router = createBrowserRouter([
   },
 ]);
 
-const App = () => {
+function App() {
   return <RouterProvider router={router} />;
-};
+}
+
 export default App;
 ```
 
