@@ -278,10 +278,10 @@ function App() {
 export default App;
 ```
 
-HomeLayout.jsx
+pages/home-layout.tsx
 
-```js
-import { Outlet } from "react-router-dom";
+```ts
+import { Outlet } from "react-router";
 
 const HomeLayout = () => {
   return (
@@ -296,19 +296,10 @@ const HomeLayout = () => {
 export default HomeLayout;
 ```
 
-## Challenge (5) - Error Page
-
-- complete error page
-- create two returns
-- first for 404 errors
-- second for all other errors
-- log the error
-- add option to navigate home
-
-### Error.jsx
+## Error Page instructions
 
 1. Import Dependencies:
-   - Import the necessary modules `useRouteError` and `Link` from the 'react-router-dom' library.
+   - Import the necessary modules `useRouteError` and `Link` from the 'react-router' library.
 
 2. Create Error Component:
    - Define a functional component named `Error`.
@@ -327,102 +318,120 @@ export default HomeLayout;
 5. Export Error Component:
    - Export the `Error` component as the default export of the module.
 
-## Solution (5) - Error Page
+pages/error.tsx
 
-Error.jsx
+```ts
+import { Link, useRouteError } from "react-router";
 
-```js
-import { useRouteError, Link } from "react-router-dom";
-const Error = () => {
+function Error() {
   const error = useRouteError();
   console.log(error);
-  if (error.status === 404)
-    return (
-      <main className="grid min-h-[100vh] place-items-center px-8">
-        <div className="text-center">
-          <p className="text-primary text-9xl font-semibold">404</p>
-          <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
-            Page not found
-          </h1>
-          <p className="mt-6 text-lg leading-7">
-            Sorry, we couldn’t find the page you’re looking for.
-          </p>
-          <div className="mt-10">
-            <Link to="/" className="btn btn-secondary">
-              Go back home
-            </Link>
+  if (
+    typeof error === "object" &&
+    error !== null &&
+    "status" in error &&
+    typeof error.status === "number"
+  ) {
+    if (error.status === 404) {
+      return (
+        <main className="grid min-h-screen place-items-center px-8">
+          <div className="text-center">
+            <p className="text-primary text-9xl font-semibold">404</p>
+            <h1 className="mt-4 text-3xl font-bold tracking-tight sm:text-5xl">
+              page not found
+            </h1>
+            <p className="mt-6 text-lg leading-7">
+              Sorry, we couldn't find the page you're looking for.
+            </p>
+            <div className="mt-10">
+              <Link to="/" className="btn btn-secondary">
+                go back home
+              </Link>
+            </div>
           </div>
-        </div>
-      </main>
-    );
+        </main>
+      );
+    }
+  }
 
   return (
-    <main className="grid min-h-[100vh] place-items-center px-8">
-      <h4 className="text-center text-4xl font-bold">there was an error... </h4>
+    <main className="grid min-h-screen place-items-center px-8">
+      <h4 className="text-center text-4xl font-bold">there was an error...</h4>
     </main>
   );
-};
+}
+
 export default Error;
+
 ```
 
-## Challenge (6) - Input Field Component
+## Input Field Component - instructions
 
-- create components folder with index.js
-- in daisyui
-- find Text input component
-- more specifically "With form-control and labels"
-- set it as component (in my case FormInput.jsx)
+- create components folder with index.ts
+- in daisyui find Input field and label components
+- set it as component (in my case form-input.tsx)
 - decide on props
-- export from index.js
+- export from index.ts
 - test in login
 
-### FormInput.jsx
+### form-input.tsx
 
 1. Create FormInput Component:
    - Define a functional component named `FormInput`.
    - The component accepts the following props: `label`, `name`, `type`, and `defaultValue`.
 
 2. FormInput Structure:
-   - Inside the component, return a `div` element with the class `form-control`, which provides styling for form inputs.
+   - Inside the component, return a `div`
    - Within this `div`, create a `label` element with the class `label`.
-   - Inside the `label`, use the `label-text` class to display the capitalized label text provided through the props.
 
 3. Input Element:
    - After the `label`, create an `input` element.
    - Set the `type` attribute of the `input` element to the value provided through the `type` prop.
    - Set the `name` attribute of the `input` element to the value provided through the `name` prop.
    - Use the `defaultValue` prop to set the initial value of the input element.
-   - Apply the `input` and `input-bordered` classes to the `input` element for styling.
+   - Apply the `input` class
 
 4. Export FormInput Component:
    - Export the `FormInput` component as the default export of the module.
 
-## Solution (6) - Input Field Component
-
-components/index.js
+components/index.ts
 
 ```js
 export { default as FormInput } from "./FormInput";
 ```
 
-FormInput.jsx
+components/form-input.tsx
 
-```js
-const FormInput = ({ label, name, type, defaultValue }) => {
+```ts
+type FormInputProps = {
+  label: string;
+  name: string;
+  type?: string;
+  defaultValue?: string;
+};
+
+function FormInput({
+  label,
+  name,
+  type = "text",
+  defaultValue = "",
+}: FormInputProps) {
   return (
     <div className="form-control">
-      <label className="label">
-        <span className="label-text capitalize">{label}</span>
+      <label htmlFor={name} className="label block">
+        {label}
       </label>
       <input
+        id={name}
         type={type}
         name={name}
         defaultValue={defaultValue}
-        className="input input-bordered"
+        className="input"
       />
     </div>
   );
-};
+}
+
 export default FormInput;
 ```
 

@@ -1,3 +1,4 @@
+import { createBrowserRouter, RouterProvider } from "react-router";
 import {
   HomeLayout,
   Landing,
@@ -11,7 +12,6 @@ import {
   Checkout,
   Orders,
 } from "./pages";
-import { createBrowserRouter, RouterProvider } from "react-router";
 
 const router = createBrowserRouter([
   {

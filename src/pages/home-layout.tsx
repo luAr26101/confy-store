@@ -1,20 +1,13 @@
-import { NavLink, Outlet } from "react-router";
+import { Outlet } from "react-router";
 
 function HomeLayout() {
   return (
-    <div>
+    <>
       <nav>
-        <ul>
-          <NavLink to="/">Home</NavLink>
-          <NavLink to="/products">Products</NavLink>
-          <NavLink to="/cart">Cart</NavLink>
-          <NavLink to="/about">About</NavLink>
-          <NavLink to="/checkout">Checkout</NavLink>
-          <NavLink to="/orders">Orders</NavLink>
-        </ul>
+        <span className="text-primary text-4xl">Comfy</span>
       </nav>
       <Outlet />
-    </div>
+    </>
   );
 }
 
