@@ -79,28 +79,52 @@ export default App;
 - add and configure daisyui to our project
 - add TailwindCSS Typography plugin
 
-## Solution (2) - Setup DaisyUI
+## Setup DaisyUI
 
-[DaisyUI](https://daisyui.com/)
+[Install DaisyUI as a Tailwind plugin](https://daisyui.com/docs/install/)
 
 ```sh
-npm i  -D daisyui@latest @tailwindcss/typography
+npm i -D daisyui@latest
 ```
 
-tailwind.config.js
+index.css
 
-```js
-{
- plugins: [require('@tailwindcss/typography'), require('daisyui')],
-}
+```css
+@import "tailwindcss";
+@plugin "daisyui";
+```
+
+- Add tailwind CSS Typography plugin
+
+```sh
+npm install -D @tailwindcss/typography
+```
+
+index.css
+
+```css
+@import "tailwindcss";
+@plugin "daisyui";
+@plugin "@tailwindcss/typography";
 ```
 
 ## Install All Libraries
 
 ```sh
-npm i axios@1.4.0 dayjs@1.11.9 @reduxjs/toolkit@1.9.5 @tanstack/react-query@4.32.6 @tanstack/react-query-devtools@4.32.6 react-icons@4.10.1 react-redux@8.1.2 react-router-dom@6.14.2 react-toastify@9.1.3
+npm i axios@1.15.0 dayjs@1.11.20 @reduxjs/toolkit@2.11.2 @tanstack/react-query@5.99.0 @tanstack/react-query-devtools@5.99.0 react-icons@5.6.0 react-redux@9.2.0 react-router@7.14.1 react-toastify@11.0.5
 
 ```
+
+### Libraries documentation
+
+- [Axios](https://axios-http.com/docs/intro)
+- [Day.js](https://day.js.org/docs/en/installation/installation)
+- [React Redux](https://react-redux.js.org/introduction/getting-started)
+- [Redux Toolkit](https://redux-toolkit.js.org/tutorials/overview)
+- [Tanstack query](https://tanstack.com/query/latest/docs/framework/react/overview)
+- [React icons](https://react-icons.github.io/react-icons/)
+- [React router](https://reactrouter.com/home)
+- [React toastify](https://fkhadra.github.io/react-toastify/introduction/)
 
 ## Challenge (3) - Create All Pages
 
