@@ -111,7 +111,7 @@ index.css
 ## Install All Libraries
 
 ```sh
-npm i axios@1.15.0 dayjs@1.11.20 @reduxjs/toolkit@2.11.2 @tanstack/react-query@5.99.0 @tanstack/react-query-devtools@5.99.0 react-icons@5.6.0 react-redux@9.2.0 react-router@7.14.1 react-toastify@11.0.5
+npm i axios@1.15.0 dayjs@1.11.20 @reduxjs/toolkit@2.11.2 @tanstack/react-query@5.99.0 @tanstack/react-query-devtools@5.99.0 react-icons@5.6.0 react-redux@9.2.0 react-router@7.14.1 react-toastify@11.0.5 clsx@2.1.1 tailwind-merge@3.5.0
 
 ```
 
@@ -125,6 +125,8 @@ npm i axios@1.15.0 dayjs@1.11.20 @reduxjs/toolkit@2.11.2 @tanstack/react-query@5
 - [React icons](https://react-icons.github.io/react-icons/)
 - [React router](https://reactrouter.com/home)
 - [React toastify](https://fkhadra.github.io/react-toastify/introduction/)
+- [clsx](https://github.com/lukeed/clsx)
+- [Tailwind Merge](https://github.com/dcastil/tailwind-merge)
 
 ## Create All Pages
 
@@ -374,7 +376,7 @@ export default Error;
 - export from index.ts
 - test in login
 
-### form-input.tsx
+### components/form-input.tsx
 
 1. Create FormInput Component:
    - Define a functional component named `FormInput`.
@@ -435,21 +437,22 @@ function FormInput({
 export default FormInput;
 ```
 
-## Challenge (7) - Login Page Structure
+## Login Page Structure
 
-- setup structure for login page (use complete project as reference)
+- setup structure for login page
 - check for loading state and disable submit button
 - setup submit button in a separate component
 - add loading spinner
 
-### SubmitBtn.jsx
+### components/submit-btn.tsx
 
 - Import Dependencies:
-  - Import `useNavigation` from `'react-router-dom'`.
+  - Import `useNavigation` from `'react-router'`.
 
 - Create the `SubmitBtn` Component:
   - Define a functional component named `SubmitBtn`.
-  - Accept a prop `text`.
+  - use clsx and tailwind merge to create a utility function called cn
+  - add the cn function to `lib/utils.ts`
 
   - Inside the component, use the `useNavigation()` hook to access navigation state.
   - Determine whether the form is submitting by checking if `navigation.state` is equal to `'submitting'`.
@@ -464,20 +467,20 @@ export default FormInput;
         - Render a `span` element with class `'loading loading-spinner'`.
         - Render the text `'sending...'`.
       - If `isSubmitting` is false:
-        - Render the `text` prop if provided, otherwise render `'submit'`.
+        - Render the `children` prop.
 
-### Login.jsx
+### pages/login.tsx
 
 - Import Dependencies:
-  - Import `FormInput` and `SubmitBtn` components from the `'../components'` directory.
-  - Import `Form` and `Link` from `'react-router-dom'`.
+  - Import `FormInput` and `SubmitBtn` components from the `components` folder.
+  - Import `Form` and `Link` from `'react-router'`.
 
 - Create the `Login` Component:
   - Define a functional component named `Login`.
 
   - Return a `section` element with class `'h-screen grid place-items-center'`.
     - Inside the `section` element, create a `Form` element with the following attributes:
-      - `method` set to `'post'`.
+      - `method` set to `'POST'`.
       - Class set to `'card w-96 p-8 bg-base-100 shadow-lg flex flex-col gap-y-4'`.
 
       - Inside the `Form` element, create an `h4` element with class `'text-center text-3xl font-bold'` containing the text `'Login'`.
@@ -502,42 +505,41 @@ export default FormInput;
           - Class set to `'ml-2 link link-hover link-primary capitalize'`.
           - Text content set to `'register'`.
 
-## Solution (7) - Login Page Structure
+## Login Page Structure
 
-Login.jsx
+pages/login.tsx
 
-```js
+```ts
 import { FormInput, SubmitBtn } from "../components";
-import { Form, Link } from "react-router-dom";
-
-const Login = () => {
+import { Form, Link } from "react-router";
+function Login() {
   return (
     <section className="grid h-screen place-items-center">
       <Form
-        method="post"
+        method="POST"
         className="card bg-base-100 flex w-96 flex-col gap-y-4 p-8 shadow-lg"
       >
         <h4 className="text-center text-3xl font-bold">Login</h4>
         <FormInput
-          type="email"
-          label="email"
+          label="Email"
           name="identifier"
+          type="email"
           defaultValue="test@test.com"
         />
         <FormInput
-          type="password"
-          label="password"
+          label="Password"
           name="password"
+          type="password"
           defaultValue="secret"
         />
         <div className="mt-4">
-          <SubmitBtn text="login" />
+          <SubmitBtn>Login</SubmitBtn>
         </div>
         <button type="button" className="btn btn-secondary btn-block">
-          guest user
+          Guest user
         </button>
-        <p className="text-center">
-          Not a member yet?
+        <p className="mt-2 text-center">
+          Not a member yet?{" "}
           <Link
             to="/register"
             className="link link-hover link-primary ml-2 capitalize"
@@ -548,46 +550,53 @@ const Login = () => {
       </Form>
     </section>
   );
-};
+}
+
 export default Login;
+
 ```
 
-SubmitBtn.jsx
+components/submit-btn.tsx
 
-```js
-import { useNavigation } from "react-router-dom";
-const SubmitBtn = ({ text }) => {
+```ts
+import { useNavigation } from "react-router";
+import { cn } from "../lib/utils";
+
+interface SubmitBtnProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+}
+
+function SubmitBtn({ children, className, ...props }: SubmitBtnProps) {
   const navigation = useNavigation();
   const isSubmitting = navigation.state === "submitting";
+
   return (
     <button
       type="submit"
-      className="btn btn-primary btn-block"
+      className={cn("btn btn-primary btn-block", className)}
       disabled={isSubmitting}
+      {...props}
     >
       {isSubmitting ? (
         <>
-          <span className="loading loading-spinner"></span>
+          <span className="loading loading-spinner loading-sm"></span>{" "}
           sending...
         </>
       ) : (
-        text || "submit"
+        children
       )}
     </button>
   );
-};
+}
+
 export default SubmitBtn;
 ```
 
-## Challenge (8) - Register Page Structure
-
-- setup structure for register page (use complete project as reference)
-
-### Register.jsx
+### pages/register.tsx
 
 - Import Dependencies:
-  - Import `FormInput` and `SubmitBtn` components from the `'../components'` directory.
-  - Import `Form` and `Link` from `'react-router-dom'`.
+  - Import `FormInput` and `SubmitBtn` components from the `'components'` directory.
+  - Import `Form` and `Link` from `'react-router'`.
 
 - Create the `Register` Component:
   - Define a functional component named `Register`.
@@ -615,13 +624,13 @@ export default SubmitBtn;
           - Class set to `'ml-2 link link-hover link-primary capitalize'`.
           - Text content set to `'login'`.
 
-## Solution (8) - Register Page Structure
+## Register Page Structure
 
-```js
+```ts
 import { FormInput, SubmitBtn } from "../components";
-import { Form, Link } from "react-router-dom";
+import { Form, Link } from "react-router";
 
-const Register = () => {
+function Register() {
   return (
     <section className="grid h-screen place-items-center">
       <Form
@@ -629,14 +638,13 @@ const Register = () => {
         className="card bg-base-100 flex w-96 flex-col gap-y-4 p-8 shadow-lg"
       >
         <h4 className="text-center text-3xl font-bold">Register</h4>
-        <FormInput type="text" label="username" name="username" />
-        <FormInput type="email" label="email" name="email" />
-        <FormInput type="password" label="password" name="password" />
+        <FormInput type="text" label="Username" name="username" />
+        <FormInput type="email" label="Email" name="email" />
+        <FormInput type="password" label="Password" name="password" />
         <div className="mt-4">
-          <SubmitBtn text="register" />
+          <SubmitBtn>Register</SubmitBtn>
         </div>
-
-        <p className="text-center">
+        <p className="mt-2 text-center">
           Already a member?
           <Link
             to="/login"
@@ -648,11 +656,12 @@ const Register = () => {
       </Form>
     </section>
   );
-};
+}
+
 export default Register;
 ```
 
-## Challenge (9) - Custom Class
+## Custom Class
 
 - create custom class
 - align content
